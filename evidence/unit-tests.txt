@@ -1,0 +1,10 @@
+test_cloud_receives_alert_not_full_video (test_rules.RulesTests.test_cloud_receives_alert_not_full_video) ... ok
+test_intrusion_and_no_repeat (test_rules.RulesTests.test_intrusion_and_no_repeat) ... ok
+test_loitering (test_rules.RulesTests.test_loitering) ... ok
+test_moving_person_not_loitering (test_rules.RulesTests.test_moving_person_not_loitering) ... ok
+test_stale_track_expires (test_rules.RulesTests.test_stale_track_expires) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.014s
+
+OK

@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Smart CCTV · Alert dashboard</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%233d7868'/%3E%3Ccircle cx='16' cy='16' r='6' fill='white'/%3E%3C/svg%3E">
+<style>
+:root{
+  --bg:#f4efec;--ink:#251f21;--muted:#6a6165;--card:#fff;--line:#e6ddd8;--line-strong:#d5c9c3;
+  --teal:#3d7868;--teal-ink:#2c5c50;--red:#b52127;--amber:#9c5a12;--green:#3f6d3a;
+  --shadow:0 1px 2px rgba(37,31,33,.05);
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+::selection{background:#cfe6dd;color:var(--ink)}
+:focus-visible{outline:2px solid var(--teal);outline-offset:2px;border-radius:6px}
+*{scrollbar-width:thin;scrollbar-color:var(--line-strong) transparent}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-thumb{background:var(--line-strong);border:3px solid var(--bg);border-radius:99px}
+
+.top{position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between;
+  gap:18px;flex-wrap:wrap;padding:14px clamp(16px,4vw,34px);background:var(--bg);border-bottom:1px solid var(--line)}
+.top h1{font-size:20px;line-height:1.2;letter-spacing:-.02em;margin:0;font-weight:650}
+.tools{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.link{color:var(--teal-ink);font-weight:600;text-decoration:none;font-size:14px}
+.link:hover{text-decoration:underline;text-underline-offset:3px}
+
+.pill{display:inline-flex;align-items:center;gap:9px;padding:7px 14px;border:1px solid var(--line-strong);
+  border-radius:99px;background:var(--card);font-size:13px;font-weight:600;white-space:nowrap}
+.dot{width:9px;height:9px;border-radius:99px;background:var(--muted);flex:none}
+.pill.processing .dot{background:var(--teal);animation:pulse 1.9s ease-out infinite}
+.pill.complete .dot{background:var(--green)}
+.pill.error .dot{background:var(--red)}
+.pill.error{border-color:#e0b9ba;background:#fbf0f0;color:var(--red)}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(61,120,104,.45)}70%{box-shadow:0 0 0 9px rgba(61,120,104,0)}100%{box-shadow:0 0 0 0 rgba(61,120,104,0)}}
+@media(prefers-reduced-motion:reduce){.pill.processing .dot{animation:none;box-shadow:none}}
+
+main{max-width:1180px;margin:0 auto;padding:clamp(20px,3.5vw,34px) clamp(16px,4vw,34px) 48px}
+.intro{margin:0 0 22px;max-width:70ch;color:var(--muted);font-size:15px}
+
+.panel{background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);overflow:hidden}
+.panel .grid{display:grid;grid-template-columns:repeat(3,1fr)}
+.cell{padding:16px 18px;border-top:1px solid var(--line);border-left:1px solid var(--line)}
+.cell:nth-child(-n+3){border-top:0}
+.cell:nth-child(3n+1){border-left:0}
+.cell .k{font-size:12.5px;color:var(--muted);margin-bottom:5px}
+.cell .v{font-size:24px;font-weight:650;letter-spacing:-.015em;color:var(--teal-ink);font-variant-numeric:tabular-nums}
+@media(max-width:720px){.panel .grid{grid-template-columns:repeat(2,1fr)}
+  .cell:nth-child(-n+3){border-top:1px solid var(--line)}.cell:nth-child(-n+2){border-top:0}
+  .cell:nth-child(3n+1){border-left:1px solid var(--line)}.cell:nth-child(2n+1){border-left:0}}
+
+.feedhead{display:flex;align-items:baseline;gap:12px;margin:34px 0 14px}
+.feedhead h2{font-size:20px;letter-spacing:-.015em;margin:0;font-weight:650}
+.count{font-size:14px;color:var(--muted);font-variant-numeric:tabular-nums}
+
+.alerts{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+@media(max-width:760px){.alerts{grid-template-columns:1fr}}
+.alert{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:var(--shadow)}
+.alert.new{animation:enter .26s cubic-bezier(.2,.8,.25,1) both}
+@keyframes enter{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.alert.new{animation:none}}
+.alert img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;background:#e8e0dc;border-bottom:1px solid var(--line)}
+.alert .body{padding:14px 16px}
+.tagrow{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}
+.tag{display:inline-block;padding:3px 9px;border-radius:7px;font-size:12px;font-weight:700;letter-spacing:.01em}
+.tag.Intrusion{background:#f7e2e3;color:var(--red)}
+.tag.Loitering{background:#f6e8d4;color:var(--amber)}
+.who{font-size:12.5px;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+.reason{margin:0;font-size:14.5px}
+.when{margin:8px 0 0;font-size:12.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+
+.empty{background:var(--card);border:1px dashed var(--line-strong);border-radius:14px;padding:26px;
+  color:var(--muted);font-size:15px;grid-column:1/-1}
+.empty strong{color:var(--ink)}
+
+.notes{margin:38px 0 0;padding-top:20px;border-top:1px solid var(--line)}
+.notes p{margin:0 0 9px;font-size:12.5px;color:var(--muted);max-width:92ch}
+.notes .team{font-weight:600;color:var(--ink)}
+</style>
+</head>
+<body>
+<div class="top">
+  <h1>Smart CCTV alert dashboard</h1>
+  <div class="tools">
+    <span class="pill" id="status"><span class="dot"></span><span id="statustext">Waiting for edge node</span></span>
+    <a class="link" href="http://127.0.0.1:5051" target="_blank" rel="noopener">Open edge monitor ↗</a>
+  </div>
+</div>
+
+<main>
+  <p class="intro" id="intro">Only alert keyframes and metrics arrive here. The full video never leaves the edge node; each alert contributes one keyframe.</p>
+
+  <section class="panel" aria-label="Live edge metrics"><div class="grid" id="metrics"></div></section>
+
+  <div class="feedhead"><h2>Alert feed</h2><span class="count" id="count"></span></div>
+  <section class="alerts" id="alerts"></section>
+
+  <footer class="notes">
+    <p>Bandwidth is an estimate: the encoded-video baseline minus the JSON request bodies actually sent (alerts and telemetry). HTTP/TCP overhead and browser viewing traffic are excluded, so it is not a packet-level measurement.</p>
+    <p>Intrusion and loitering are explainable rule-based examples, not validated safety recognition. The sample footage includes a clearly marked freeze used to demonstrate the loitering rule repeatably.</p>
+    <p><span class="team">TEAM14 · edge computing demonstration.</span> This laptop hosts both simulated nodes; it is not a deployed cloud service.</p>
+  </footer>
+</main>
+
+<script>
+const fields=[['fps','Processing FPS',''],['latency_ms','Mean detection + rule latency',' ms'],['saved_percent','Estimated bandwidth reduction','%'],['upload_kb','Edge-to-dashboard payload',' KB'],['cpu_percent','Edge process CPU (one-core basis)','%'],['rss_mb','Edge process memory',' MB']];
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const statusEl=document.getElementById('status'),statusText=document.getElementById('statustext');
+const metricsEl=document.getElementById('metrics'),alertsEl=document.getElementById('alerts');
+const countEl=document.getElementById('count');
+let lastTopId=null;
+
+function setStatus(state,text){statusEl.className='pill '+state;statusText.textContent=text;}
+
+async function refresh(){
+  try{
+    const s=await(await fetch('/api/state')).json();
+    const m=s.metrics||{},st=m.status||'Waiting for edge node';
+    const frames=m.frames||0,vid=m.video_seconds||0;
+    if(st.indexOf('Complete')===0)setStatus('complete','Run complete · '+(m.frames||0)+' frames');
+    else if(st==='Processing')setStatus('processing','Live · '+frames+' frames · '+vid+'s of video');
+    else setStatus('','Waiting for edge node');
+    metricsEl.innerHTML=fields.map(([k,t,u])=>'<div class="cell"><div class="k">'+t+'</div><div class="v">'+(m[k]===undefined?'–':Number(m[k]).toFixed(1))+u+'</div></div>').join('');
+
+    const alerts=s.alerts||[];
+    countEl.textContent=alerts.length?alerts.length+(alerts.length===1?' alert':' alerts'):'';
+    const topId=alerts.length?alerts[0].id:null;
+    const animateId=(topId&&topId!==lastTopId)?topId:null;
+    lastTopId=topId;
+    alertsEl.innerHTML=alerts.map(a=>{
+      const type=esc(a.type);
+      const cls=/^[A-Za-z]+$/.test(a.type||'')?a.type:'';
+      return '<article class="alert'+(a.id===animateId?' new':'')+'">'
+        +'<img src="'+esc(a.image)+'" alt="Keyframe captured at the ' + type + ' alert">'
+        +'<div class="body"><div class="tagrow"><span class="tag '+cls+'">'+type+'</span>'
+        +'<span class="who">person '+esc(a.track_id)+'</span></div>'
+        +'<p class="reason">'+esc(a.reason)+'</p>'
+        +'<p class="when">'+esc(a.wall_time)+' · video '+esc(a.video_seconds)+'s</p></div></article>';
+    }).join('')||'<div class="empty"><strong>No alerts yet.</strong> Start the edge node (run.py) and events will appear here — each with a timestamp, a reason and one keyframe.</div>';
+  }catch(e){
+    setStatus('error','Dashboard connection interrupted');
+  }
+}
+refresh();setInterval(refresh,1000);
+</script>
+</body>
+</html>

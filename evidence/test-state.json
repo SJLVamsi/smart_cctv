@@ -1,0 +1,71 @@
+{
+  "alerts": [
+    {
+      "id": "1791862961722539649",
+      "image": "/keyframes/1791862961722539649.jpg",
+      "reason": "Person center remained within 24px for 4s",
+      "track_id": 5,
+      "type": "Loitering",
+      "video_seconds": 27.6,
+      "wall_time": "2026-10-13T09:12:41+05:30"
+    },
+    {
+      "id": "1791862958946766732",
+      "image": "/keyframes/1791862958946766732.jpg",
+      "reason": "Person center entered the configured restricted zone",
+      "track_id": 24,
+      "type": "Intrusion",
+      "video_seconds": 24.8,
+      "wall_time": "2026-10-13T09:12:38+05:30"
+    },
+    {
+      "id": "1791862952824986025",
+      "image": "/keyframes/1791862952824986025.jpg",
+      "reason": "Person center entered the configured restricted zone",
+      "track_id": 17,
+      "type": "Intrusion",
+      "video_seconds": 18.7,
+      "wall_time": "2026-10-13T09:12:32+05:30"
+    },
+    {
+      "id": "1791862945129659743",
+      "image": "/keyframes/1791862945129659743.jpg",
+      "reason": "Person center remained within 24px for 4s",
+      "track_id": 10,
+      "type": "Loitering",
+      "video_seconds": 11.0,
+      "wall_time": "2026-10-13T09:12:25+05:30"
+    },
+    {
+      "id": "1791862940335324066",
+      "image": "/keyframes/1791862940335324066.jpg",
+      "reason": "Person center entered the configured restricted zone",
+      "track_id": 13,
+      "type": "Intrusion",
+      "video_seconds": 6.2,
+      "wall_time": "2026-10-13T09:12:20+05:30"
+    },
+    {
+      "id": "1791862935116318993",
+      "image": "/keyframes/1791862935116318993.jpg",
+      "reason": "Person center entered the configured restricted zone",
+      "track_id": 1,
+      "type": "Intrusion",
+      "video_seconds": 0.1,
+      "wall_time": "2026-10-13T09:12:15+05:30"
+    }
+  ],
+  "metrics": {
+    "baseline_kb": 3490.22,
+    "cpu_percent": 48.4,
+    "device": "cpu",
+    "fps": 10.0,
+    "frames": 280,
+    "latency_ms": 55.18,
+    "rss_mb": 390.88,
+    "saved_percent": 86.03,
+    "status": "Complete - replay by restarting the demo",
+    "upload_kb": 487.49,
+    "video_seconds": 28.0
+  }
+}
