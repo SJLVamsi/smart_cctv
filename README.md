@@ -4,6 +4,16 @@ TEAM14 demo: IP-camera file substitute -> laptop edge node -> alert-only cloud-d
 
 **Honest scope:** intrusion and loitering are explainable heuristic demonstrations, not validated anomaly recognition. Fights, falls, abandoned bags and live RTSP are not implemented. Both nodes run on your laptop; no actual cloud deployment is claimed.
 
+## Run it (clone from GitHub)
+
+```sh
+git clone https://github.com/SJLVamsi/smart_cctv.git
+cd smart_cctv
+bash setup_and_run.sh
+```
+
+`setup_and_run.sh` picks a suitable Python, creates `.venv`, installs the packages once, then runs the demo and opens both pages. To run it again later: `source .venv/bin/activate && python run.py`. Then open the dashboard at `http://127.0.0.1:5050` and the edge monitor at `http://127.0.0.1:5051`. The ZIP-based class setup and manual steps are below.
+
 ## Fast setup on your Mac
 
 Internet is needed once to install Python packages. The sample video and YOLOv8n weights are already included. Setup targets Python 3.13, Apple Silicon, macOS 13 or newer. About 5-15 minutes on a typical connection, but download speed can change this. No paid service, account, camera, training or GPU is needed.
